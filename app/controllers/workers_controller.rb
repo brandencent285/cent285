@@ -9,6 +9,27 @@ class WorkersController < ApplicationController
     end
     # new lines ends
   end
+  def create
+    require "digest/md5"
+    pass = Digest::MD5.hexdigest(params[:password])
+    Worker.create(:name => params[:name],
+    :username => params[:username],
+    :password => pass,
+    :department => params[:department])
+  end
+  def destroy
+    id = params[:id]
+    Worker.destroy(id)
+  end
+  def update
+    worker = Worker.find_by_id(params[:id])
+    require "digest/md5"
+    pass = Digest::MD5.hexdigest(params[:password])
+    worker.update_attributes(:name => params[:name],
+    :username => params[:username],
+    :password => pass,
+    :department => params[:department])
+  end
   def login
     if params[:username] == nil
       username = password = ""
@@ -21,12 +42,12 @@ class WorkersController < ApplicationController
       username + "','" + password + "')")
     id = idString.to_i
     cookies.signed[:id] = id
-    if id == 1
-      redirect_to :controller => "workers", 
-        :action => "admin"
-    elsif id > 1
-      redirect_to :controller => "workshops", :action => "index"
-    end 
+    redirect_to :controller => "workers", :action => "text"
+    end
+  def text
+    id = cookies.signed[:id]
+    respond_to do |format|
+      format.html { render :text => id }
   end
   def logout
     cookies.signed[:id] = nil;

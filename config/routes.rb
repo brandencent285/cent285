@@ -13,5 +13,9 @@ Proj1::Application.routes.draw do
   match "workshops/select_workshop" => "workshops#select_workshop"
   match "workers/logout" => "workers#logout"
   match "workshops/summary" => "workshops#summary"
+  match "workers/create" => "workers#create"
+  match "workers/update" => "workers#update"
+  match "workers/destroy" => "workers#destroy"
+  match "workers/text" => "workers#text"
   match "workshops/show_participants" => "workshops#show_participants"
 end
